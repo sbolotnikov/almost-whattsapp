@@ -4,22 +4,40 @@ import ChatIcon from "@mui/icons-material/Chat";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import * as EmailValidator from "email-validator";
+import Chat from "./Chat";
+import { auth, db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useCollection } from "react-firebase-hooks/firestore";
+// import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 function Sidebar() {
-
+    const [user] = useAuthState(auth);
+    const userChatRef = db.collection('chats').where('users', 'array-contains', user.email);
+    const [chatsSnapshot] = useCollection(userChatRef);
     const createChat =() => {
         const input = prompt(
             "Please enter an email address for the user you wish to chat with"
             );
         if (!input) return null;  
-        if (EmailValidator.validate(input)) {
+        if (EmailValidator.validate(input) && !chatAlreadyExists(input) && input!==user.email) {
             // add chat to db
+            db.collection('chats').add({
+              users: [user.email, input],
+            })
         }
     }
+
+    const chatAlreadyExists = (recipientEmail) =>
+       !!chatsSnapshot?.docs.find(
+         (chat) =>
+            chat.data().users.find((user) => user === recipientEmail)?.length >0
+            );
+    
   return (
     <Container>
       <Header>
-        <UserAvatar />
+        <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
 
         <IconsContainer>
           <IconButton>
@@ -35,7 +53,10 @@ function Sidebar() {
         <SearchInput placeholder="Search in chats" />
       </Search>
       <SidebarButton onClick={createChat}>Start a new chat</SidebarButton>
-      {/* List of chts */}
+      {/* List of chats */}
+      {chatsSnapshot?.docs.map((chat) => (
+        <Chat key={chat.id} id={chat.id} users={chat.data().users} />
+      ))}
     </Container>
   );
 }

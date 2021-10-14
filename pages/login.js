@@ -2,7 +2,7 @@ import Head from "next/head";
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import { auth, provider } from "../firebase";
-
+import "firebase/compat/auth";
 function Login() {
     const signIn = () => {
       auth.signInWithPopup(provider).catch(alert);
