@@ -5,8 +5,8 @@ import styled from "styled-components";
 export default function UploadDropbox() {
   const [url, setUrl] = useState("");
   function handleSuccess(files) {
-    setUrl(files[0].thumbnailLink);
-    console.log(url);
+    setUrl(files[0].link);
+    console.log(files[0].link);
   }
   return (
     <Container>
