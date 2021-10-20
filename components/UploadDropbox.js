@@ -15,9 +15,8 @@ export default function UploadDropbox() {
       <h1 style={{ textAlign: "center" }}>Upload Or Choose Files to DropBox</h1>
       <br />
       <br />
-      {/* appKey={process.env.CHAT_DROPBOX_APPKEY} */}
         <DropboxChooser
-          appKey={process.env.CHAT_DROPBOX_APPKEY}
+          appKey={process.env.NEXT_PUBLIC_DROPBOX_APPKEY}
           success={handleSuccess}
           cancel={() => console.log("closed")}
           multiselect={true}
@@ -45,9 +44,11 @@ const Container = styled.div`
 `;
 
 const DropBoxContainer = styled.div`
+ max-width:350px;
   width:60%;
   z-index:150;
-  padding: 100px;
+  margin: 10%;
+  padding: 3%3px;
   display: flex;
   flex-direction: column;
   align-items: center;
