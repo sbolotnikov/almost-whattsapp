@@ -14,12 +14,14 @@ import Message from "./Message";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import TimeAgo from "timeago-react";
 import { useRef, useState } from "react";
+import UploadDropbox from "./UploadDropbox";
 
 function ChatScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const endOfMessagesRef = useRef(null);
   const [input, setInput] = useState("");
+  const [vis, setVis] = useState(false);
   const [messagesSnapshot] = useCollection(
     db
       .collection("chats")
@@ -56,6 +58,11 @@ function ChatScreen({ chat, messages }) {
       behavior: "smooth",
       block: "start",
     });
+  };
+  const uploadDropboxVisibility = () => {
+    setVis(!vis);
+    console.log(process.env.CHAT_DROPBOX_APPKEY);
+
   };
   const sendMessage = (e) => {
     e.preventDefault();
@@ -104,14 +111,16 @@ function ChatScreen({ chat, messages }) {
         </HeaderInformation>
         <HeaderIcons>
           <IconButton>
-            <AttachFileIcon />
+            <AttachFileIcon onClick={uploadDropboxVisibility} />
           </IconButton>
           <IconButton>
             <MoreVertIcon />
           </IconButton>
         </HeaderIcons>
       </Header>
+
       <MessageContainer>
+        {vis && <UploadDropbox />}
         {showMessages()}
         <EndOfMessage ref={endOfMessagesRef} />
       </MessageContainer>
@@ -153,7 +162,7 @@ const InputContainer = styled.form`
 const Header = styled.div`
   position: sticky;
   background-color: white;
-  z-index: 100;
+  z-index: 120;
   top: 0;
   display: flex;
   padding: 11px;
