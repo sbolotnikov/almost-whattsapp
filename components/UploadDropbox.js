@@ -25,7 +25,7 @@ export default function UploadDropbox() {
           <div className="dropbox"></div>
           <br />
           <br />
-          <img src={url} width="200" height="200" alt="" />
+          <img src={'https://www.dropbox.com/s/d2dzos6nkbg8fap/IMG_20150531_121814.jpg'} width="200" height="200" alt="" />
         </DropboxChooser>
       </DropBoxContainer>
     </Container>

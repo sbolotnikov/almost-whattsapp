@@ -37,7 +37,7 @@ function Chat({id, users }) {
             <p>{recipientEmail}</p>
             <p>{lastMessage ? lastMessage.message : "..."}</p>
             <Timestamp>
-            {lastMessage ? moment(lastMessage.timestamp.toDate().getTime()).format('LLL') : "..."}
+            {!!lastMessage &&(lastMessage.timestamp!=null) ? moment(lastMessage.timestamp.toDate().getTime()).format('LLL') : "..."}
             </Timestamp>
             </MessageElement>
             

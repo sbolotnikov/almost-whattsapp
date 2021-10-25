@@ -4,23 +4,26 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import { Avatar, IconButton } from "@material-ui/core";
+import { Avatar, Button, IconButton } from "@material-ui/core";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import MicIcon from "@mui/icons-material/Mic";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import TimeAgo from "timeago-react";
-import { useRef, useState } from "react";
-import UploadDropbox from "./UploadDropbox";
+import { useRef, useState, useEffect } from "react";
+import Cloudinary from "./Cloudinary";
 
-function ChatScreen({ chat, messages }) {
+function ChatScreen({ chat, messages, scrSmall }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const endOfMessagesRef = useRef(null);
   const [input, setInput] = useState("");
+  const [attached, setAttached] = useState({});
   const [vis, setVis] = useState(false);
   const [messagesSnapshot] = useCollection(
     db
@@ -52,6 +55,10 @@ function ChatScreen({ chat, messages }) {
       ));
     }
   };
+  useEffect(() => {
+    // see indication of the attached file
+    console.log(attached);
+  }, [attached]);
 
   const scrollToBottom = () => {
     endOfMessagesRef.current.scrollIntoView({
@@ -59,11 +66,16 @@ function ChatScreen({ chat, messages }) {
       block: "start",
     });
   };
-  const uploadDropboxVisibility = () => {
+  const uploadCloudinaryVisibility = () => {
     setVis(!vis);
-    console.log(process.env.CHAT_DROPBOX_APPKEY);
-
   };
+  function handleFileInput(t) {
+    // update information of the test state
+    setVis(!vis);
+    let linkObj;
+    setAttached(t);
+  }
+
   const sendMessage = (e) => {
     e.preventDefault();
     // Update Last seen
@@ -86,6 +98,10 @@ function ChatScreen({ chat, messages }) {
   };
   const recipient = recipientSnapshot?.docs?.[0]?.data();
   const recipientEmail = getRecipientEmail(chat.users, user);
+  
+  const exitChat = () => {
+    router.push(`/`);
+}
   return (
     <Container>
       <Header>
@@ -95,7 +111,7 @@ function ChatScreen({ chat, messages }) {
           <Avatar>{recipientEmail[0]}</Avatar>
         )}
         <HeaderInformation>
-          <h3>{recipientEmail}</h3>
+          <h3 style={{}}>{recipientEmail}</h3>
           {recipientSnapshot ? (
             <p>
               Last active:{" "}
@@ -111,7 +127,7 @@ function ChatScreen({ chat, messages }) {
         </HeaderInformation>
         <HeaderIcons>
           <IconButton>
-            <AttachFileIcon onClick={uploadDropboxVisibility} />
+            <ArrowBackIcon onClick={exitChat}/>
           </IconButton>
           <IconButton>
             <MoreVertIcon />
@@ -120,17 +136,18 @@ function ChatScreen({ chat, messages }) {
       </Header>
 
       <MessageContainer>
-        {vis && <UploadDropbox />}
+        {vis && <Cloudinary onChange={(t) => handleFileInput(t)} />}
         {showMessages()}
         <EndOfMessage ref={endOfMessagesRef} />
       </MessageContainer>
       <InputContainer>
         <InsertEmoticonIcon />
-        <Input value={input} onChange={(e) => setInput(e.target.value)} />
-        <button hidden disabled={!input} type="submit" onClick={sendMessage}>
-          Send Message
-        </button>
+        <InputArea value={input} onChange={(e) => setInput(e.target.value)} />
         <MicIcon />
+          <AttachFileIcon onClick={uploadCloudinaryVisibility} />
+        {input && (
+            <PlayArrowIcon disabled={!input} type="submit" onClick={sendMessage} />
+        )}
       </InputContainer>
     </Container>
   );
@@ -140,15 +157,15 @@ export default ChatScreen;
 
 const Container = styled.div``;
 
-const Input = styled.input`
+const InputArea = styled.textarea`
   flex: 1;
   outline: 0;
   border: none;
   border-radius: 10px;
   background-color: whitesmoke;
   padding: 10px;
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
 `;
 const InputContainer = styled.form`
   display: flex;
