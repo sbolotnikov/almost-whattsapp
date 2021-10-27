@@ -35,7 +35,7 @@ function Chat({id, users }) {
             
             <MessageElement>
             <p>{recipientEmail}</p>
-            <p>{lastMessage ? lastMessage.message : "..."}</p>
+            <p>{lastMessage.url ? "FILE ATTACHED ": "" }{lastMessage ? lastMessage.message : "..."}</p>
             <Timestamp>
             {!!lastMessage &&(lastMessage.timestamp!=null) ? moment(lastMessage.timestamp.toDate().getTime()).format('LLL') : "..."}
             </Timestamp>

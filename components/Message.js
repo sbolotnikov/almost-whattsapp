@@ -13,12 +13,33 @@ function Message({ user, message }) {
       someDate.getFullYear() == today.getFullYear()
     );
   };
+
+  const showFile = () => {
+    if (message.filetype === "img")
+      return <img src={message.url} alt="" width="80%" />;
+    if (message.filetype === "video")
+      return (
+        <video width="80%" hight="auto" controls>
+          <source src={message.url} />
+          Your browser does not support the video tag.
+        </video>
+      );
+    if (message.filetype === "audio")
+      return (
+        <audio controls >
+          <source src={message.url} />
+          Your browser does not support the audio element.
+        </audio>
+      );
+    // case "audio":
+  };
   const [userLoggedIn] = useAuthState(auth);
   const TypeOfMessage = user === userLoggedIn.email ? Sender : Reciever;
   return (
     <Container>
       <TypeOfMessage>
-        {message.message}
+        {showFile()}
+        <p>{message.message}</p>
         <Timestamp>
           {message.timestamp
             ? isToday(message.timestamp)

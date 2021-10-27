@@ -10,21 +10,27 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import MicIcon from "@mui/icons-material/Mic";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import TimeAgo from "timeago-react";
 import { useRef, useState, useEffect } from "react";
 import Cloudinary from "./Cloudinary";
+import MicRecord from "./MicRecord";
+import EmojiShow from "./EmojiShow";
 
 function ChatScreen({ chat, messages, scrSmall }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const endOfMessagesRef = useRef(null);
   const [input, setInput] = useState("");
-  const [attached, setAttached] = useState({});
+  const [attached, setAttached] = useState({ url: "", type: "" });
   const [vis, setVis] = useState(false);
+  const [voiceRecVis, setVoiceRecVis] = useState(false);
+  const [visEmoji, setVisEmoji] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [messagesSnapshot] = useCollection(
     db
       .collection("chats")
@@ -69,39 +75,62 @@ function ChatScreen({ chat, messages, scrSmall }) {
   const uploadCloudinaryVisibility = () => {
     setVis(!vis);
   };
+
+  const emojiVisibility = () => {
+    setVisEmoji(!visEmoji);
+  };
+
+  function handleEmojiInput(t) {
+    setInput(input + t);
+  }
+ 
   function handleFileInput(t) {
-    // update information of the test state
     setVis(!vis);
-    let linkObj;
     setAttached(t);
   }
-
+  function handleEmojiInput(t) {
+    setInput(input+t);
+  }
+  useEffect(() => {
+    if (loading) {
+      // Update Last seen
+      db.collection("users").doc(user.uid).set(
+        {
+          lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+      db.collection("chats").doc(router.query.id).collection("messages").add({
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        message: input,
+        user: user.email,
+        photoURL: user.photoURL,
+        filetype: attached.type,
+        url: attached.url,
+      });
+  
+      setInput("");
+      setAttached({ url: "", type: "" });
+      scrollToBottom();
+      setLoading(false);
+    }
+}, [loading])
+  function handleVoiceRecording(t){
+    setVoiceRecVis(!voiceRecVis);
+    setAttached(t);
+    setLoading(true);
+  }
   const sendMessage = (e) => {
     e.preventDefault();
-    // Update Last seen
-    db.collection("users").doc(user.uid).set(
-      {
-        lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
-      },
-      { merge: true }
-    );
+    setLoading(true);
 
-    db.collection("chats").doc(router.query.id).collection("messages").add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      message: input,
-      user: user.email,
-      photoURL: user.photoURL,
-    });
-
-    setInput("");
-    scrollToBottom();
   };
   const recipient = recipientSnapshot?.docs?.[0]?.data();
   const recipientEmail = getRecipientEmail(chat.users, user);
-  
+
   const exitChat = () => {
     router.push(`/`);
-}
+  };
   return (
     <Container>
       <Header>
@@ -120,15 +149,18 @@ function ChatScreen({ chat, messages, scrSmall }) {
               ) : (
                 "Unavailable"
               )}
+              {/* <ArrowBackIcon /> */}
             </p>
           ) : (
             <p>Loading last active....</p>
           )}
         </HeaderInformation>
         <HeaderIcons>
-          <IconButton>
-            <ArrowBackIcon onClick={exitChat}/>
-          </IconButton>
+          {scrSmall && (
+            <IconButton onClick={exitChat}>
+              <ArrowBackIcon />
+            </IconButton>
+          )}
           <IconButton>
             <MoreVertIcon />
           </IconButton>
@@ -137,16 +169,25 @@ function ChatScreen({ chat, messages, scrSmall }) {
 
       <MessageContainer>
         {vis && <Cloudinary onChange={(t) => handleFileInput(t)} />}
+        
         {showMessages()}
         <EndOfMessage ref={endOfMessagesRef} />
       </MessageContainer>
+      {visEmoji && 
+      <EmojiShow onChange={(t) => handleEmojiInput(t)} />
+       }
+      {voiceRecVis && <MicRecord onChange={(t) => handleVoiceRecording(t)}/>} 
       <InputContainer>
-        <InsertEmoticonIcon />
+        <InsertEmoticonIcon onClick={emojiVisibility} />
         <InputArea value={input} onChange={(e) => setInput(e.target.value)} />
-        <MicIcon />
-          <AttachFileIcon onClick={uploadCloudinaryVisibility} />
-        {input && (
-            <PlayArrowIcon disabled={!input} type="submit" onClick={sendMessage} />
+        <MicIcon onClick={()=>{setVoiceRecVis(!voiceRecVis)}}/>
+        <AttachFileIcon onClick={uploadCloudinaryVisibility} />
+        {(input || attached.url) && (
+          <PlayArrowIcon
+            disabled={!input}
+            type="submit"
+            onClick={sendMessage}
+          />
         )}
       </InputContainer>
     </Container>
@@ -174,7 +215,7 @@ const InputContainer = styled.form`
   position: sticky;
   bottom: 0;
   background-color: white;
-  z-index: 100;
+  z-index: 120;
 `;
 const Header = styled.div`
   position: sticky;
