@@ -19,6 +19,7 @@ import { useRef, useState, useEffect } from "react";
 import Cloudinary from "./Cloudinary";
 import MicRecord from "./MicRecord";
 import EmojiShow from "./EmojiShow";
+import GetChatOptions from "./GetChatOptions";
 
 function ChatScreen({ chat, messages, scrSmall }) {
   const [user] = useAuthState(auth);
@@ -30,6 +31,8 @@ function ChatScreen({ chat, messages, scrSmall }) {
   const [voiceRecVis, setVoiceRecVis] = useState(false);
   const [visEmoji, setVisEmoji] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [visChatSet, setVisChatSet] = useState(false);
+  const [chatName, setChatName] = useState("");
 
   const [messagesSnapshot] = useCollection(
     db
@@ -100,6 +103,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
         },
         { merge: true }
       );
+      
       db.collection("chats").doc(router.query.id).collection("messages").add({
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         message: input,
@@ -125,6 +129,21 @@ function ChatScreen({ chat, messages, scrSmall }) {
     setLoading(true);
 
   };
+  function getChatName() {
+    db
+    .collection("chats")
+    .doc(router.query.id)
+    .get()
+    .then((chat) => {
+      console.log(chat.data().header)
+     setChatName(chat.data().header);
+    }).catch((error) => {
+      console.error(error);
+      setChatName('');
+    });
+  };
+
+  getChatName();
   const recipient = recipientSnapshot?.docs?.[0]?.data();
   const recipientEmail = getRecipientEmail(chat.users, user);
 
@@ -133,6 +152,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
   };
   return (
     <Container>
+    {visChatSet && <GetChatOptions chat={router.query.id} onClose={(a)=>{setVisChatSet(!visChatSet)}}/>}
       <Header>
         {recipient ? (
           <Avatar src={recipient?.photoURL} />
@@ -140,7 +160,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
           <Avatar>{recipientEmail[0]}</Avatar>
         )}
         <HeaderInformation>
-          <h3 style={{}}>{recipientEmail}</h3>
+          <h3 >{chatName }</h3>
           {recipientSnapshot ? (
             <p>
               Last active:{" "}
@@ -161,7 +181,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
               <ArrowBackIcon />
             </IconButton>
           )}
-          <IconButton>
+          <IconButton onClick={()=>{setVisChatSet(!visChatSet)}}>
             <MoreVertIcon />
           </IconButton>
         </HeaderIcons>

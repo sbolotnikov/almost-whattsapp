@@ -7,7 +7,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useRouter} from "next/router";
 import moment from "moment";
 
-function Chat({id, users }) {
+function Chat({id, users, title }) {
     const router = useRouter();
     const [user] = useAuthState(auth);
     const [recipientSnapshot] = useCollection(
@@ -20,7 +20,7 @@ function Chat({id, users }) {
     const enterChat = () => {
         router.push(`/chat/${id}`);
     }
-
+    
     
     const recipient = recipientSnapshot?.docs?.[0]?.data();
     const lastMessage = lastMessageSnapshot?.docs?.[0]?.data();
@@ -34,7 +34,7 @@ function Chat({id, users }) {
             )}
             
             <MessageElement>
-            <p>{recipientEmail}</p>
+            <p>{title}</p>
             <p>{!!lastMessage ? lastMessage.url.length>0?"FILE ATTACHED ": "": "" }{!!lastMessage ? lastMessage.message : "..."}</p>
             <Timestamp>
             {!!lastMessage &&(lastMessage.timestamp!=null) ? moment(lastMessage.timestamp.toDate().getTime()).format('LLL') : "..."}
