@@ -8,10 +8,9 @@ import "firebase/compat/auth";
 
 const firebaseConfig = {
   apiKey: process.env.CHAT_FIREBASE_APIKEY,
-  apiKey: "AIzaSyC5VrkrvUr2zl3sVnOhqk9ywsRya60HcFQ",
-  authDomain: "almost-whattsup.firebaseapp.com",
-  projectId: "almost-whattsup",
-  storageBucket: "almost-whattsup.appspot.com",
+  authDomain: CHAT_FIREBASE_AUTH_DOMAIN,
+  projectId: CHAT_FIREBASE_PROJECT_ID,
+  storageBucket: CHAT_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: "946261875744",
   appId: "1:946261875744:web:d410a9319fe1bf7703f045"
 };
