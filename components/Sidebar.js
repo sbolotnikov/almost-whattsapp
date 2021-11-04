@@ -11,10 +11,12 @@ import GetChatOptions from "./GetChatOptions";
 import { useState } from "react";
 // import firebase from 'firebase/compat/app';
 import "firebase/compat/firestore";
+import Profile from "./Profile";
 
 function Sidebar() {
   const [user] = useAuthState(auth);
   const [visChatSet, setVisChatSet] = useState(false);
+  const [visProfile, setVisProfile] = useState(false);
   const userChatRef = db
     .collection("chats")
     .where("users", "array-contains", user.email);
@@ -22,9 +24,10 @@ function Sidebar() {
   return (
     <Container>
     {visChatSet && <GetChatOptions chat={""} onClose={(a)=>{setVisChatSet(!visChatSet)}}/>}
+    {visProfile && <Profile />}
       <Header>
-        <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
-
+        <UserAvatar src={user.photoURL} onClick={() =>{setVisProfile(true)} } />
+        {/* auth.signOut() */}
         <IconsContainer>
           <IconButton>
             <ChatIcon />

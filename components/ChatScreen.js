@@ -26,6 +26,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
   const router = useRouter();
   const endOfMessagesRef = useRef(null);
   const [input, setInput] = useState("");
+  const [isGroup, setIsGroup] = useState(false);
   const [attached, setAttached] = useState({ url: "", type: "" });
   const [vis, setVis] = useState(false);
   const [voiceRecVis, setVoiceRecVis] = useState(false);
@@ -135,8 +136,9 @@ function ChatScreen({ chat, messages, scrSmall }) {
     .doc(router.query.id)
     .get()
     .then((chat) => {
-      console.log(chat.data().header)
+      console.log(chat.data())
      setChatName(chat.data().header);
+     chat.data().participants>2 ? setIsGroup(true):setIsGroup(false);
     }).catch((error) => {
       console.error(error);
       setChatName('');
@@ -145,6 +147,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
 
   getChatName();
   const recipient = recipientSnapshot?.docs?.[0]?.data();
+  console.log(recipient);
   const recipientEmail = getRecipientEmail(chat.users, user);
 
   const exitChat = () => {

@@ -3,16 +3,15 @@ import { auth, db, app } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "./login";
 import Loading from "../components/Loading";
+import { AuthProvider } from "../contexts/AuthContext";
 import { useEffect } from "react";
-// import { collection, doc, setDoc } from "firebase/firestore"; 
-import firebase from 'firebase/compat/app'; 
+import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
 function MyApp({ Component, pageProps }) {
   const [user, loading] = useAuthState(auth);
   useEffect(() => {
     if (user) {
-
       // await
       //  setDoc(doc(collection(db, "users"), user.uid), {
       //   email: user.email,
@@ -20,9 +19,6 @@ function MyApp({ Component, pageProps }) {
       //   photoURL: user.photoURL,
       // },
       // { merge: true });
-
-
-
 
       db.collection("users").doc(user.uid).set(
         {
@@ -36,7 +32,11 @@ function MyApp({ Component, pageProps }) {
   }, [user]);
   if (loading) return <Loading />;
   if (!user) return <Login />;
-  return <Component {...pageProps} />;
+  return(
+  <AuthProvider>
+    <Component {...pageProps} />;
+  </AuthProvider>
+  )
 }
 
 export default MyApp;
