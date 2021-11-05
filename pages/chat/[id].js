@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Head from "next/head";
 import Sidebar from "../../components/Sidebar";
+import Profile from "../../components/Profile";
 import ChatScreen from "../../components/ChatScreen";
 import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -11,6 +12,7 @@ import {  useEffect, useState } from "react";
 function Chat({messages, chat}) {
     const [user] = useAuthState(auth);
     const [widthSrc, setWidth] = useState(window.innerWidth);
+    const [visProfile, setVisProfile] = useState(false);
     // window.innerWidth
 
 
@@ -26,10 +28,11 @@ function Chat({messages, chat}) {
       <Head>
         <tytle>Chat with {getRecipientEmail(chat.users, user)}</tytle>
       </Head>
-      {widthSrc>767 && <Sidebar />}
+      {widthSrc>767 && <Sidebar onCall={(e)=>{setVisProfile(!visProfile)}}/>}
       <ChatContainer>
         <ChatScreen chat={chat} messages={messages} scrSmall={widthSrc>767 ? false : true}/>
       </ChatContainer>
+      {widthSrc>767 && visProfile && <Profile onClose={a=>{setVisProfile(false)}}/>} 
     </Container>
   );
 }

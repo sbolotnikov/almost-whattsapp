@@ -23,6 +23,8 @@ function Chat({id, users, title }) {
     
     
     const recipient = recipientSnapshot?.docs?.[0]?.data();
+    console.log(recipient?.displayName);
+    var chatTitle=(title.length>0)?title:recipient?.displayName
     const lastMessage = lastMessageSnapshot?.docs?.[0]?.data();
     const recipientEmail = getRecipientEmail(users, user);
     return (
@@ -34,7 +36,7 @@ function Chat({id, users, title }) {
             )}
             
             <MessageElement>
-            <p>{title}</p>
+            <p>{chatTitle}</p>
             <p>{!!lastMessage ? lastMessage.url.length>0?"FILE ATTACHED ": "": "" }{!!lastMessage ? lastMessage.message : "..."}</p>
             <Timestamp>
             {!!lastMessage &&(lastMessage.timestamp!=null) ? moment(lastMessage.timestamp.toDate().getTime()).format('LLL') : "..."}

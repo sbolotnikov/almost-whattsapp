@@ -61,19 +61,17 @@ function Login() {
           />
         ) : (
           <InputContainer onSubmit={handleSubmit}>
-            <label>
-              Email
+            <label>Email</label>
               <InputStyled id="email" type="email" ref={emailRef} required />
-            </label>
-            <label>
-              Password
+            
+            <label>Password</label>
               <InputStyled
                 id="password"
                 type="password"
                 ref={passwordRef}
                 required
               />
-            </label>
+            
             <StyleButton disabled={loading} type="submit">
               Log In
             </StyleButton>

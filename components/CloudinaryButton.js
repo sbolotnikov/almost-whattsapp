@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import Axios from 'axios'
-
+import styled from "styled-components";
+import { Button } from "@material-ui/core";
 function CloudinaryButton(props) {
     // handles cloudinary upload and providing the link for a parent component
     const [imageSelected, setImageSelected]=useState('');
@@ -14,19 +15,42 @@ function CloudinaryButton(props) {
        )
        .then(response=>{
         setImageSelected("");
-        console.log(response.data.url)
-        console.log(event.target.parentElement.previousSibling.value)
+        let url=response.data.url;
+        console.log(url);
         event.target.parentElement.previousSibling.value=""; 
-        props.getImgUrl(response.data.url);
+        props.getImgUrl(url);
         })
-        .catch(e=>{console.log('Fail to upload image')})
+        .catch(e=>{console.log('Fail to upload image', e)})
     }
 
     return(
-        <div style={{display:'flex', alignItems:'center', justifyContent:'start', marginLeft:'2%', maxWidth:'600px'}}>
-            <input type='file' onChange={(event)=>setImageSelected(event.target.files[0])}/>
-            <div className="cloudinary-button testNav" onClick={(e)=>{pictureUpload(e)}}>Upload Image</div>
-        </div>
+        <Container>
+            <InputStyled type='file' onChange={(event)=>setImageSelected(event.target.files[0])}/>
+            <StyleButton onClick={(e)=>{pictureUpload(e)}}>Upload Image</StyleButton>
+        </Container>
     )
     }
 export default CloudinaryButton
+const Container = styled.div`
+display:flex;
+flex-direction: column;
+align-items:center;
+margin-top:10px;
+`;
+const InputStyled = styled.input`
+  
+  outline: 0;
+  border: none;
+  border-radius: 10px;
+  background-color: whitesmoke;
+  padding: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+`;
+const StyleButton = styled(Button)`
+  width: 100%;
+  &&& {
+    border-top: 1px solid whitesmoke;
+    border-bottom: 1px solid whitesmoke;
+  }
+`;

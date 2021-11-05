@@ -137,7 +137,10 @@ function ChatScreen({ chat, messages, scrSmall }) {
     .get()
     .then((chat) => {
       console.log(chat.data())
-     setChatName(chat.data().header);
+
+      var chatTitle=(chat.data().header.length>0)?chat.data().header:recipient?.displayName
+
+     setChatName(chatTitle);
      chat.data().participants>2 ? setIsGroup(true):setIsGroup(false);
     }).catch((error) => {
       console.error(error);
