@@ -16,10 +16,10 @@ function Message({ user, message }) {
 
   const showFile = () => {
     if (message.filetype === "img")
-      return <img src={message.url} alt="" width="80%" />;
+      return <img loading="lazy" src={message.url} alt="" width="80%" />;
     if (message.filetype === "video")
       return (
-        <video width="80%" hight="auto" controls>
+        <video preload="none" width="80%" hight="auto" controls>
           <source src={message.url} />
           Your browser does not support the video tag.
         </video>
