@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Almost WhattsApp ![test-editor](https://img.shields.io/github/license/sbolotnikov/almost-whattsapp)
+## Description 
+https://github.com/sbolotnikov/almost-whattsapp
+Almost Whattsapp is a personal project using the Firebase DB, NextJS, NextAuth .
 
-## Getting Started
+Lesser technologies: cloudinary, styled-components, material UI, dotenv, react-firebase-hooks, emoji-picker and more.
 
-First, run the development server:
+Responsive chat application. You can send chat messages with emoji, voice messages, send files(video, pictures). It also supports group chats.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Users are able to log in directly using email/password or using integration with Google OAuth. They can update their profile picture and upload pictures for the tests using cloudinary.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Table of Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Questions](#questions)
+* [Review](#review)
+## Installation 
+Simply clone the repo, and/or visit the deployed page link to begin.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Chat on desktop
+![test-editor](./public/images/img1.png) 
 
-## Learn More
+### Starting new group chat
+![test-editor](./public/images/img2.png) 
 
-To learn more about Next.js, take a look at the following resources:
+### Voice recording screen
+![test-editor](./public/images/img3.png) 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Log in, Sign in, Profile screenshots
+![test-editor](./public/images/img4.png) 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Starting new single person chat screen
+![test-editor](./public/images/img5.png) 
 
-## Deploy on Vercel
+### Mobile screenshots and Google sign in
+![test-editor](./public/images/img5.jpg) 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Upload file screen
+![test-editor](./public/images/img6.png) 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Contributing 
+ None 
+## License 
+ Licensed under MIT License. 
+## Tests 
+ None
+## Questions 
+ You can see more of my Projects on my [GitHub profile](https://github.com/sbolotnikov) 
+ Contact me with any questions or suggestions!
+ * Sergey Bolotnikov [sbolotnikov](mailto:sbolotnikov@gmail.com)
+## Review 
+  * Here is this repo link: https://github.com/sbolotnikov/almost-whattsapp
+ 
+  * Link: [Almost WhattsApp](https://almost-whattsapp.vercel.app)

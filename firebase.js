@@ -7,19 +7,14 @@ import "firebase/compat/auth";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC5VrkrvUr2zl3sVnOhqk9ywsRya60HcFQ",
-  authDomain: "almost-whattsup.firebaseapp.com",
-  projectId: "almost-whattsup",
-  storageBucket: "almost-whattsup.appspot.com",
-  messagingSenderId: "946261875744",
-  appId: "1:946261875744:web:d410a9319fe1bf7703f045"
-  // apiKey: process.env.CHAT_FIREBASE_APIKEY,
-  // authDomain:  process.env.CHAT_FIREBASE_AUTH_DOMAIN,
-  // projectId:  process.env.CHAT_FIREBASE_PROJECT_ID,
-  // storageBucket:  process.env.CHAT_FIREBASE_STORAGE_BUCKET,
-  // messagingSenderId: "946261875744",
-  // appId: "1:946261875744:web:d410a9319fe1bf7703f045"
+  apiKey:process.env.NEXT_PUBLIC_FIREBASE_APIKEY,
+  authDomain:process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId:process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket:process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId:"946261875744",
+  appId:"1:946261875744:web:d410a9319fe1bf7703f045"
 };
+
 const app = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();

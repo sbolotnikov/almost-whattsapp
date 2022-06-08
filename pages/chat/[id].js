@@ -26,7 +26,7 @@ function Chat({messages, chat}) {
   return (
     <Container>
       <Head>
-        <tytle>Chat with {getRecipientEmail(chat.users, user)}</tytle>
+        <title>Chat with {getRecipientEmail(chat.users, user)}</title>
       </Head>
       {widthSrc>767 && <Sidebar onCall={(e)=>{setVisProfile(!visProfile)}}/>}
       <ChatContainer>
