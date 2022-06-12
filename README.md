@@ -41,6 +41,8 @@ Simply clone the repo, and/or visit the deployed page link to begin.
 ### Upload file screen
 ![test-editor](./public/images/img6.png) 
 
+### Logo animation
+![test-editor](./public/images/img.gif) 
 
 ## Contributing 
  None 
