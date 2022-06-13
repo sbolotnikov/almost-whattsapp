@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { Button } from "@material-ui/core";
 function CloudinaryButton(props) {
     // handles cloudinary upload and providing the link for a parent component
-    const [imageSelected, setImageSelected]=useState('');
-    const pictureUpload=(event)=> {
+    // const [imageSelected, setImageSelected]=useState('');
+    const pictureUpload=(event, imageSelected)=> {
+      console.log(event.target, imageSelected)
        const formData= new FormData();
        formData.append('file', imageSelected);
        formData.append('upload_preset',process.env.NEXT_PUBLIC_CLOUD_PRESET);
@@ -14,10 +15,9 @@ function CloudinaryButton(props) {
            formData
        )
        .then(response=>{
-        setImageSelected("");
         let url=response.data.url;
         console.log(url);
-        event.target.parentElement.previousSibling.value=""; 
+        event.target.value=""; 
         props.getImgUrl(url);
         })
         .catch(e=>{console.log('Fail to upload image', e)})
@@ -25,8 +25,8 @@ function CloudinaryButton(props) {
 
     return(
         <Container>
-            <InputStyled type='file' onChange={(event)=>setImageSelected(event.target.files[0])}/>
-            <StyleButton onClick={(e)=>{pictureUpload(e)}}>Upload Image</StyleButton>
+            <InputStyled id="selectImage" hidden type='file' onChange={(event)=>{pictureUpload(event, event.target.files[0])}}/>
+            <StyleButton onClick={()=>{document.getElementById("selectImage").click()}}>Upload Image</StyleButton>
         </Container>
     )
     }

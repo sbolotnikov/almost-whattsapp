@@ -41,11 +41,18 @@
       }
       25%{
           opacity:1;
+          fill:#44B253;
 
       }
+      54%{
+        fill:#00ff21;
+      }
     62% {
-      fill: lightgoldenrodyellow;
+      fill:white;
       opacity:1
+    }
+    70%{
+      fill:#00ff21;
     }
     100%{
         fill:#44B253;
