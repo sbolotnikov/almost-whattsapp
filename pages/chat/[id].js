@@ -1,38 +1,91 @@
-import styled from "styled-components";
-import Head from "next/head";
-import Sidebar from "../../components/Sidebar";
-import Profile from "../../components/Profile";
-import ChatScreen from "../../components/ChatScreen";
-import { auth, db } from "../../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import getRecipientEmail from "../../utils/getRecipientEmail"
-import { useCollection } from "react-firebase-hooks/firestore"
-import {  useEffect, useState } from "react";
+import styled from 'styled-components';
+import Head from 'next/head';
+import Sidebar from '../../components/Sidebar';
+import Profile from '../../components/Profile';
+import ChatScreen from '../../components/ChatScreen';
+import { auth, db } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import getRecipientEmail from '../../utils/getRecipientEmail';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { useEffect, useState } from 'react';
 
-function Chat({messages, chat}) {
-    const [user] = useAuthState(auth);
-    const [widthSrc, setWidth] = useState(window.innerWidth);
-    const [visProfile, setVisProfile] = useState(false);
-    // window.innerWidth
+function Chat({ messages, chat }) {
+  const [user] = useAuthState(auth);
+  const [widthSrc, setWidth] = useState(window.innerWidth);
+  const [visProfile, setVisProfile] = useState(false);
+  // window.innerWidth
 
-
- useEffect(() => {
+  useEffect(() => {
     function handleResize() {
-      setWidth(window.innerWidth);  
-}
+      setWidth(window.innerWidth);
+    }
 
     window.addEventListener('resize', handleResize);
-})
+  });
   return (
     <Container>
       <Head>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#603cba" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta
+          name="description"
+          content="Sergey Bolotnikov's Almost WhatsApp chat "
+        />
+                <meta
+          property="og:title"
+          content="Sergey Bolotnikov's Almost WhatsApp chat "
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://almost-whattsapp.vercel.app/"
+        />
+        <meta
+          property="og:image"
+          content="https://almost-whattsapp.vercel.app/images/logo.jpg"
+        />
         <title>Chat with {getRecipientEmail(chat.users, user)}</title>
       </Head>
-      {widthSrc>767 && <Sidebar onCall={(e)=>{setVisProfile(!visProfile)}}/>}
+      {widthSrc > 767 && (
+        <Sidebar
+          onCall={(e) => {
+            setVisProfile(!visProfile);
+          }}
+        />
+      )}
       <ChatContainer>
-        <ChatScreen chat={chat} messages={messages} scrSmall={widthSrc>767 ? false : true}/>
+        <ChatScreen
+          chat={chat}
+          messages={messages}
+          scrSmall={widthSrc > 767 ? false : true}
+        />
       </ChatContainer>
-      {widthSrc>767 && visProfile && <Profile onClose={a=>{setVisProfile(false)}}/>} 
+      {widthSrc > 767 && visProfile && (
+        <Profile
+          onClose={(a) => {
+            setVisProfile(false);
+          }}
+        />
+      )}
     </Container>
   );
 }
@@ -40,12 +93,12 @@ function Chat({messages, chat}) {
 export default Chat;
 
 export async function getServerSideProps(context) {
-  const ref = db.collection("chats").doc(context.query.id);
+  const ref = db.collection('chats').doc(context.query.id);
 
   // PREP the messages on the server
   const messagesRes = await ref
-    .collection("messages")
-    .orderBy("timestamp", "asc")
+    .collection('messages')
+    .orderBy('timestamp', 'asc')
     .get();
 
   const messages = messagesRes.docs
