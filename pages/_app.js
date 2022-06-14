@@ -62,19 +62,6 @@ function MyApp({ Component, pageProps }) {
           name="description"
           content="Sergey Bolotnikov's Almost WhatsApp chat "
         />
-        <meta
-          property="og:title"
-          content="Sergey Bolotnikov's Almost WhatsApp chat "
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://almost-whattsapp.vercel.app/"
-        />
-        <meta
-          property="og:image"
-          content="https://almost-whattsapp.vercel.app/images/logo.jpg"
-        />
       </Head>
       <Component {...pageProps} />;
     </AuthProvider>
