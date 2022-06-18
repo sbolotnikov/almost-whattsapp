@@ -37,7 +37,6 @@ function Login() {
   }
   return (
     <Container>
-      <LoginContainer>
         <Head>
         <link
           rel="apple-touch-icon"
@@ -68,6 +67,7 @@ function Login() {
             {signupVis ? 'Sign up' : passResetVis ? 'Reset Password' : 'Login'}
           </title>
         </Head>
+        <LoginContainer> 
         <Logo>
           <LogoAnim />
           <ScriptContainer>
@@ -185,8 +185,8 @@ const Container = styled.div`
 `;
 const ScriptContainer = styled.div`
   position: absolute;
-  bottom: 2.25rem;
-  right: -4rem;
+  bottom: 3rem;
+  right: -2rem;
   transform: rotate(-35deg);
   display: flex;
   flex-direction: column;
@@ -197,18 +197,18 @@ const ScriptContainer = styled.div`
 `;
 const ScriptContainer1 = styled.div`
   position: absolute;
-  bottom: -2.8rem;
+  bottom: -1.5rem;
   left: -2rem;
   display: flex;
   color: #44b253;
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
 const LoginContainer = styled.div`
-  padding: 100px;
+  padding: 0 30px 0 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -221,5 +221,6 @@ const Logo = styled.div`
   position: relative;
   height: 200px;
   width: 200px;
-  margin-bottom: 20px;
 `;
+
+

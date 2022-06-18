@@ -155,6 +155,6 @@ function LogoAnim() {
 export default LogoAnim;
 
 const Logo = styled.div`
-  height: 200px;
-  width: 200px;
+  height: 180px;
+  width: 180px;
 `;
