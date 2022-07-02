@@ -11,6 +11,8 @@ import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import MicIcon from "@mui/icons-material/Mic";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CallIcon from '@mui/icons-material/Call';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
 import getRecipientEmail from "../utils/getRecipientEmail";
@@ -20,7 +22,7 @@ import Cloudinary from "./Cloudinary";
 import MicRecord from "./MicRecord";
 import EmojiShow from "./EmojiShow";
 import GetChatOptions from "./GetChatOptions";
-
+import { v1 as uuid } from "uuid";
 function ChatScreen({ chat, messages, scrSmall }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
@@ -156,6 +158,12 @@ function ChatScreen({ chat, messages, scrSmall }) {
   const exitChat = () => {
     router.push(`/`);
   };
+  const makeCall = () => {
+    const id = uuid();
+    setAttached({ url: `/room/${id}`, type: "link" });
+    setLoading(true);
+    router.push(`/room/${id}`);
+  };
   return (
     <Container>
     {visChatSet && <GetChatOptions chat={router.query.id} onClose={(a)=>{setVisChatSet(!visChatSet)}}/>}
@@ -165,6 +173,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
         ) : (
           <Avatar>{recipientEmail[0]}</Avatar>
         )}
+        <HeaderRightSide>
         <HeaderInformation>
           <h3 >{chatName }</h3>
           {recipientSnapshot ? (
@@ -182,15 +191,22 @@ function ChatScreen({ chat, messages, scrSmall }) {
           )}
         </HeaderInformation>
         <HeaderIcons>
+            <IconButton onClick={makeCall}>
+              <VideoCallIcon />
+            </IconButton>
+            <IconButton onClick={makeCall}>
+              <CallIcon />
+            </IconButton>
+          <IconButton onClick={()=>{setVisChatSet(!visChatSet)}}>
+            <MoreVertIcon />
+          </IconButton>
           {scrSmall && (
             <IconButton onClick={exitChat}>
               <ArrowBackIcon />
             </IconButton>
           )}
-          <IconButton onClick={()=>{setVisChatSet(!visChatSet)}}>
-            <MoreVertIcon />
-          </IconButton>
         </HeaderIcons>
+        </HeaderRightSide>
       </Header>
 
       <MessageContainer>
@@ -254,20 +270,42 @@ const Header = styled.div`
   align-items: center;
   border-bottom: 1px solid whitesmoke;
 `;
-
+const HeaderRightSide = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width:100%;
+  /* @media (max-width: 768px) {
+    flex-direction: column;
+  } */
+`;
 const HeaderInformation = styled.div`
   margin-left: 15px;
-  flex: 1;
+  margin-top: 10px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
   > h3 {
-    margin-bottom: 3px;
+    width: 100%;
+    margin:0;
   }
   > p {
-    font-size: 14px;
+    font-size: 1em;
+    margin:0;
     color: gray;
   }
 `;
 
-const HeaderIcons = styled.div``;
+const HeaderIcons = styled.div`
+   width:30%;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: end;
+   > button {
+     padding:.15em;
+   }
+`;
 const MessageContainer = styled.div`
   padding: 10px;
   background-color: #e5ded8;

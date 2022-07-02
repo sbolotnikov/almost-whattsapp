@@ -31,6 +31,10 @@ function Message({ user, message }) {
           Your browser does not support the audio element.
         </audio>
       );
+      if (message.filetype === "link")
+      return (
+        <a href={message.url}>Join the call</a>
+      );
     // case "audio":
   };
   const [userLoggedIn] = useAuthState(auth);
