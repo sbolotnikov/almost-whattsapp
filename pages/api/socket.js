@@ -12,7 +12,7 @@ const SocketHandler = (req, res) => {
 
 const socketToRoom = {};
 
-io.on('connection', socket => {
+res.socket.server.io.on('connection', socket => {
     socket.on("join room", roomID => {
         if (users[roomID]) {
             const length = users[roomID].length;
@@ -26,7 +26,7 @@ io.on('connection', socket => {
         }
         socketToRoom[socket.id] = roomID;
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
-
+        console.log(usersInThisRoom)
         socket.emit("all users", usersInThisRoom);
     });
 

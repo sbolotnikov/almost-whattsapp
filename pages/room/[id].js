@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
+import {io} from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 
@@ -40,12 +40,13 @@ const Room = ({roomID}) => {
     const userVideo = useRef();
     const peersRef = useRef([]);
 
-    useEffect(() => {
+    useEffect(async () => {
         const videoConstraints = {
             height: window.innerHeight / 2,
             width: window.innerWidth / 2
         };
-        socketRef.current = io.connect("/api/socket");
+        await fetch('/api/socket')
+        socketRef.current = io.connect('/api/socket');
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
             socketRef.current.emit("join room", roomID);

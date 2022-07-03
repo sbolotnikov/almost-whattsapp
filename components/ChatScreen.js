@@ -120,6 +120,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
       setAttached({ url: "", type: "" });
       scrollToBottom();
       setLoading(false);
+      
     }
 }, [loading])
   function handleVoiceRecording(t){
