@@ -1,9 +1,17 @@
 import styled from "styled-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
+import CallIcon from '@mui/icons-material/Call';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
+import { IconButton } from "@material-ui/core";
 import moment from "moment";
+import { CallContext } from "../callContext";
+import { useContext } from "react";
+import { useRouter } from "next/router";
 
 function Message({ user, message }) {
+  const { setAudioOnly} = useContext(CallContext);
+  const router = useRouter();
   const isToday = (millisecs) => {
     const today = new Date();
     const someDate = new Date(millisecs);
@@ -13,7 +21,12 @@ function Message({ user, message }) {
       someDate.getFullYear() == today.getFullYear()
     );
   };
-
+  const joinCall = (e,a) => {
+    e.preventDefault();
+    // set context value depending on video or audio call
+    setAudioOnly(a)
+    router.push(message.url);
+  };
   const showFile = () => {
     if (message.filetype === "img")
       return <img loading="lazy" src={message.url} alt="" width="80%" />;
@@ -33,7 +46,16 @@ function Message({ user, message }) {
       );
       if (message.filetype === "link")
       return (
-        <a href={message.url}>Join the call</a>
+        <div>
+
+<IconButton onClick={(e)=>joinCall(e,false)}>
+              <VideoCallIcon />
+            </IconButton>
+            <IconButton onClick={(e)=>joinCall(e,true)}>
+              <CallIcon />
+            </IconButton>
+        <h5>Join the call</h5>
+        </div>
       );
     // case "audio":
   };

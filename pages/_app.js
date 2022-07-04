@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import Head from 'next/head';
+import CallProvider from '../callContext';
 
 function MyApp({ Component, pageProps }) {
   const [user, loading] = useAuthState(auth);
@@ -36,10 +37,10 @@ function MyApp({ Component, pageProps }) {
   if (!user) return <Login />;
   return (
     <AuthProvider>
-      <Head>
-
-      </Head>
-      <Component {...pageProps} />;
+      <Head></Head>
+      <CallProvider>
+        <Component {...pageProps} />;
+      </CallProvider>
     </AuthProvider>
   );
 }

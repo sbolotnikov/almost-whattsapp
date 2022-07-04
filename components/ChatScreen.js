@@ -17,12 +17,13 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import TimeAgo from "timeago-react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import Cloudinary from "./Cloudinary";
 import MicRecord from "./MicRecord";
 import EmojiShow from "./EmojiShow";
 import GetChatOptions from "./GetChatOptions";
 import { v1 as uuid } from "uuid";
+import { CallContext } from "../callContext";
 function ChatScreen({ chat, messages, scrSmall }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
@@ -36,6 +37,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
   const [loading, setLoading] = useState(false);
   const [visChatSet, setVisChatSet] = useState(false);
   const [chatName, setChatName] = useState("");
+  const { setAudioOnly} = useContext(CallContext);
 
   const [messagesSnapshot] = useCollection(
     db
@@ -159,8 +161,11 @@ function ChatScreen({ chat, messages, scrSmall }) {
   const exitChat = () => {
     router.push(`/`);
   };
-  const makeCall = () => {
+  const makeCall = (e, a) => {
+    e.preventDefault();
     const id = uuid();
+    // set context value depending on video or audio call
+    setAudioOnly(a)
     setAttached({ url: `/room/${id}`, type: "link" });
     setLoading(true);
     router.push(`/room/${id}`);
@@ -192,10 +197,10 @@ function ChatScreen({ chat, messages, scrSmall }) {
           )}
         </HeaderInformation>
         <HeaderIcons>
-            <IconButton onClick={makeCall}>
+            <IconButton onClick={(e)=>makeCall(e,false)}>
               <VideoCallIcon />
             </IconButton>
-            <IconButton onClick={makeCall}>
+            <IconButton onClick={(e)=>makeCall(e,true)}>
               <CallIcon />
             </IconButton>
           <IconButton onClick={()=>{setVisChatSet(!visChatSet)}}>

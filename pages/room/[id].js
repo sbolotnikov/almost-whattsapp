@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {io} from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
-
+import { CallContext } from "../../callContext";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase";
+import { Avatar } from "@material-ui/core";
 const Container = styled.div`
     padding: 20px;
     display: flex;
@@ -35,16 +38,22 @@ const Video = (props) => {
 
 
 const Room = ({roomID}) => {
+    const { audioOnly} = useContext(CallContext);
+    const [user] = useAuthState(auth);
+    const [audio, setAudio] = useState(true);
+    const [videoAdd, setVideoAdd] = useState(!audioOnly);
     const [peers, setPeers] = useState([]);
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
 
     useEffect(async () => {
-        const videoConstraints = {
+        const videoConstraints = videoAdd?{
             height: window.innerHeight / 2,
             width: window.innerWidth / 2
-        };
+        }:{height: 0,
+        width: 0};
+        console.log(audioOnly)
         socketRef.current = io.connect(process.env.NEXT_PUBLIC_SERVER);
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
@@ -111,7 +120,7 @@ const Room = ({roomID}) => {
 
     return (
         <Container>
-            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+            {videoAdd?<StyledVideo muted ref={userVideo} autoPlay playsInline />:<UserAvatar src={user.photoURL} />}
             {peers.map((peer, index) => {
                 return (
                     <Video key={index} peer={peer} />
@@ -125,3 +134,9 @@ export default Room;
 export function getServerSideProps(context) {
     return { props: { roomID: context.query.id} };
   }
+  const UserAvatar = styled(Avatar)`
+  cursor: pointer;
+  :hover {
+    opacity: 0.8;
+  }
+`;
