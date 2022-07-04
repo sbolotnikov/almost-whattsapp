@@ -45,11 +45,10 @@ const Room = ({roomID}) => {
             height: window.innerHeight / 2,
             width: window.innerWidth / 2
         };
-        await fetch('/api/socket')
-        socketRef.current = io.connect('/api/socket');
+        socketRef.current = io.connect(process.env.NEXT_PUBLIC_SERVER);
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
-            socketRef.current.emit("join room", roomID);
+            socketRef.current.emit("join room", {roomID, codeword:process.env.NEXT_PUBLIC_CODEWORD});
             socketRef.current.on("all users", users => {
                 const peers = [];
                 users.forEach(userID => {
