@@ -56,8 +56,8 @@ const Room = ({roomID}) => {
 
     useEffect(async () => {
         const videoConstraints = videoAdd?{
-            height: (window.innerHeight>window.innerWidth)?1280:720,
-            width: (window.innerHeight>window.innerWidth)?720:1280
+            height: {ideal:(window.innerHeight>window.innerWidth)?1280:720},
+            width: {ideal:(window.innerHeight>window.innerWidth)?720:1280}
         }:{height: 0,
         width: 0};
         console.log(audioOnly)
