@@ -7,14 +7,16 @@ import { auth, db } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import getRecipientEmail from '../../utils/getRecipientEmail';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CallContext } from '../../callContext';
+import CallPanel from '../../components/CallPanel';
 
 function Chat({ messages, chat }) {
   const [user] = useAuthState(auth);
   const [widthSrc, setWidth] = useState(window.innerWidth);
   const [visProfile, setVisProfile] = useState(false);
   // window.innerWidth
-
+  const { newCall, setNewCall } =useContext(CallContext);
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -23,7 +25,7 @@ function Chat({ messages, chat }) {
     window.addEventListener('resize', handleResize);
   });
   return (
-    <Container>
+    <Container >
       <Head>
         <link
           rel="apple-touch-icon"
@@ -65,6 +67,10 @@ function Chat({ messages, chat }) {
         />
         <title>Chat with {getRecipientEmail(chat.users, user)}</title>
       </Head>
+      {newCall && (
+        <CallPanel onClose={(a) => {setNewCall(a);}}
+        />
+      )}
       {widthSrc > 767 && (
         <Sidebar
           onCall={(e) => {
@@ -126,6 +132,7 @@ export async function getServerSideProps(context) {
 
 const Container = styled.div`
   display: flex;
+  position: relative;
 `;
 
 const ChatContainer = styled.div`

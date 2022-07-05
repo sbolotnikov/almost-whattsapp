@@ -22,14 +22,9 @@ const StyledVideoHost = styled.video`
     bottom: 0;
     right: 0;
 `;
-// const StyledVideo = styled.video`
-//     height: 50%;
-//     width: 50%;
-// `;
-
-
-
-
+const StyledVideo = styled.video`
+    margin:auto;
+`;
 
 const Room = ({roomID}) => {
     const { audioOnly} = useContext(CallContext);
@@ -52,7 +47,7 @@ const Room = ({roomID}) => {
         }, []);
     
         return (
-            <video playsInline autoPlay ref={ref} style={{height:`${(peers.length<4)?100/peers.length:"50"}%`,width:`${(peers.length>3)?"50%":"100%"}`}}/>
+            <StyledVideo playsInline autoPlay ref={ref} style={{height:`${(peers.length<4)?100/peers.length:"50"}%`,width:`${(peers.length>3)?"50%":"100%"}`}}/>
         );
     }
 

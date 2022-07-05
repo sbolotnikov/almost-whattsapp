@@ -8,8 +8,7 @@ import { CallContext } from '../callContext';
 
 export default function Home() {
   const [visProfile, setVisProfile] = useState(false);
-  const { newCall, setNewCall } =
-  useContext(CallContext);
+  const { newCall, setNewCall } =useContext(CallContext);
   return (
     <div style={{position: 'relative'}}>
       <Head>
