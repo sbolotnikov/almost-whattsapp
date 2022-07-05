@@ -26,20 +26,7 @@ const StyledVideoHost = styled.video`
 //     height: 50%;
 //     width: 50%;
 // `;
-const Video = (props) => {
-    const ref = useRef();
-    console.log(`height:${(peers.length<3)?100/(peers.length+1)*100:"50"}%`)
-    console.log(`width:${(peers.length>2)?"50%":"100%"}`)
-    useEffect(() => {
-        props.peer.on("stream", stream => {
-            ref.current.srcObject = stream;
-        })
-    }, []);
 
-    return (
-        <video playsInline autoPlay ref={ref} style={{height:`${(peers.length<3)?100/(peers.length+1)*100:"50"}%`,width:`${(peers.length>2)?"50%":"100%"}`}}/>
-    );
-}
 
 
 
@@ -53,6 +40,22 @@ const Room = ({roomID}) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
+
+    const Video = (props) => {
+        const ref = useRef();
+        console.log(`height:${(peers.length<3)?100/(peers.length+1)*100:"50"}%`)
+        console.log(`width:${(peers.length>2)?"50%":"100%"}`)
+        useEffect(() => {
+            props.peer.on("stream", stream => {
+                ref.current.srcObject = stream;
+            })
+        }, []);
+    
+        return (
+            <video playsInline autoPlay ref={ref} style={{height:`${(peers.length<3)?100/(peers.length+1)*100:"50"}%`,width:`${(peers.length>2)?"50%":"100%"}`}}/>
+        );
+    }
+
 
     useEffect(async () => {
         const videoConstraints = videoAdd?{
