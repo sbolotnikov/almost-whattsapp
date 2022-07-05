@@ -6,9 +6,12 @@ import { auth, db } from "../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useRouter} from "next/router";
 import moment from "moment";
+import { useEffect, useContext } from "react";
+import { CallContext } from "../callContext";
 
 function Chat({id, users, title }) {
     const router = useRouter();
+    const { setNewCall, setRoom, setCallerImg, setGroupCall, setCallerName} = useContext(CallContext);
     const [user] = useAuthState(auth);
     const [recipientSnapshot] = useCollection(
         db.collection("users").where("email", "==", getRecipientEmail(users,user))
@@ -26,6 +29,18 @@ function Chat({id, users, title }) {
     console.log(recipient?.displayName);
     var chatTitle=(title.length>0)?title:recipient?.displayName
     const lastMessage = lastMessageSnapshot?.docs?.[0]?.data();
+    useEffect(() => {
+        if (!!lastMessage) if(lastMessage.filetype=="link"){
+         if(new Date(Date.now()).getTime()-lastMessage.timestamp.toDate().getTime()<60000){
+             setCallerName(chatTitle);
+             setGroupCall((title.length>0)?true:false);
+             setCallerImg((title.length>0)?recipientEmail[0]:recipient?.photoURL);
+             setRoom(lastMessage.url)
+             setNewCall(true);
+            }else console.log("old")
+            
+        }
+    },[lastMessage]);
     const recipientEmail = getRecipientEmail(users, user);
     return (
         <Container onClick={enterChat}>
@@ -37,7 +52,7 @@ function Chat({id, users, title }) {
             
             <MessageElement>
             <p>{chatTitle}</p>
-            <p>{!!lastMessage ? lastMessage.url.length>0?"FILE ATTACHED ": "": "" }{!!lastMessage ? lastMessage.message : "..."}</p>
+            <p>{!!lastMessage ? lastMessage.url.length>0? lastMessage.filetype!=="link"? "FILE ATTACHED ":"PHONE CALL": "": "" }{!!lastMessage ? lastMessage.message : "..."}</p>
             <Timestamp>
             {!!lastMessage &&(lastMessage.timestamp!=null) ? moment(lastMessage.timestamp.toDate().getTime()).format('LLL') : "..."}
             </Timestamp>

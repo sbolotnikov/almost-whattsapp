@@ -202,7 +202,7 @@ function ChatScreen({ chat, messages, scrSmall }) {
             </IconButton>
             <IconButton onClick={(e)=>makeCall(e,true)}>
               <CallIcon />
-            </IconButton>
+            </IconButton>  
           <IconButton onClick={()=>{setVisChatSet(!visChatSet)}}>
             <MoreVertIcon />
           </IconButton>

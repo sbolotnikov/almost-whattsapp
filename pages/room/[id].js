@@ -7,19 +7,25 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase";
 import { Avatar } from "@material-ui/core";
 const Container = styled.div`
-    padding: 20px;
     display: flex;
     height: 100vh;
-    width: 90%;
-    margin: auto;
+    width: 100vw;
+    display: flex;
     flex-wrap: wrap;
+    position: relative;
 `;
 
+const StyledVideoHost = styled.video`
+    height: 20%;
+    width: 25%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+`;
 const StyledVideo = styled.video`
-    height: 40%;
+    height: 50%;
     width: 50%;
 `;
-
 const Video = (props) => {
     const ref = useRef();
 
@@ -30,7 +36,7 @@ const Video = (props) => {
     }, []);
 
     return (
-        <StyledVideo playsInline autoPlay ref={ref} />
+        <video playsInline autoPlay ref={ref} style={{height:`${(peers.length<4)?100/peers.length*100:"50"}%`,width:`${(peers.length>3)?"50%":"100%"}`}}/>
     );
 }
 
@@ -120,7 +126,7 @@ const Room = ({roomID}) => {
 
     return (
         <Container>
-            {videoAdd?<StyledVideo muted ref={userVideo} autoPlay playsInline />:<UserAvatar src={user.photoURL} />}
+            {videoAdd?<StyledVideoHost muted ref={userVideo} autoPlay playsInline />:<UserAvatar src={user.photoURL} />}
             {peers.map((peer, index) => {
                 return (
                     <Video key={index} peer={peer} />
