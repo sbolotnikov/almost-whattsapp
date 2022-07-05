@@ -43,8 +43,8 @@ const Room = ({roomID}) => {
 
     const Video = (props) => {
         const ref = useRef();
-        console.log(`height:${(peers.length<3)?100/(peers.length+1)*100:"50"}%`)
-        console.log(`width:${(peers.length>2)?"50%":"100%"}`)
+        console.log(`height:${(peers.length<4)?100/peers.length:"50"}%`)
+        console.log(`width:${(peers.length>3)?"50%":"100%"}`)
         useEffect(() => {
             props.peer.on("stream", stream => {
                 ref.current.srcObject = stream;
@@ -52,7 +52,7 @@ const Room = ({roomID}) => {
         }, []);
     
         return (
-            <video playsInline autoPlay ref={ref} style={{height:`${(peers.length<3)?100/(peers.length+1)*100:"50"}%`,width:`${(peers.length>2)?"50%":"100%"}`}}/>
+            <video playsInline autoPlay ref={ref} style={{height:`${(peers.length<4)?100/peers.length:"50"}%`,width:`${(peers.length>3)?"50%":"100%"}`}}/>
         );
     }
 
