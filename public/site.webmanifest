@@ -1,8 +1,8 @@
 
 {
-    "name": "Sergey Bolotnikov Portfolio",
-      "short_name": "Sergey Bolotnikov Portfolio",
-      "description": "Sergey Bolotnikov is a Full Stack Developer  from USA, working as a Software Engineer and contributing to frontend and backend for building web applications.",
+    "name": "Almost WhattsApp",
+      "short_name": "Almost WhattsApp",
+      "description": "Responsive chat application. You can send chat messages with emoji, voice messages, send files(video, pictures). It also supports group chats.",
     "theme_color": "#fff",
     "background_color": "#fff",
     "display": "standalone",
