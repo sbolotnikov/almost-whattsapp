@@ -29,7 +29,7 @@ function Message({ user, message }) {
   };
   const showFile = () => {
     if (message.filetype === "img")
-      return <img loading="lazy" src={message.url} alt="" width="80%" />;
+      return <img loading="lazy" src={message.url} alt="" width="30%" />;
     if (message.filetype === "video")
       return (
         <video preload="none" width="80%" hight="auto" controls>
